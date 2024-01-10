@@ -1,7 +1,6 @@
 package com.examen_ci.gestion_produit;
 
-import static org.junit.Assert.assertTrue;
-
+import static org.junit.Assert.*;
 import java.io.File;
 import org.junit.After;
 import org.junit.Rule;
@@ -12,6 +11,7 @@ public class ProduitTest
 {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
 
     /**
      * Unit test for create product.
@@ -75,6 +75,20 @@ public class ProduitTest
         ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
         ProduitService.create(new Produit(Long.parseLong("2"), "keyborad", 400, 8));
         assertTrue(true);
+    }
+    
+    
+    /**
+     * Unit test for read products.
+     */
+    @Test
+    public void readFromEmptyFile(){
+        assertTrue(ProduitService.read().isEmpty());
+    }
+    @Test
+    public void readFromNonEmptyFile(){
+        ProduitService.create(new Produit(Long.parseLong("3"), "table", 1500, 8));
+        assertFalse(ProduitService.read().isEmpty());
     }
 
     @After
