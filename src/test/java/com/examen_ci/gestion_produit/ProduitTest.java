@@ -156,6 +156,25 @@ public class ProduitTest
         assertTrue(true);
     }
     
+    
+    /**
+     * Unit test for delete products.
+     */
+    @Test
+    public void deleteNonExisting(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("does not exist");
+
+        ProduitService.delete(1L);
+    }
+    @Test
+    public void deleteExisting(){
+        ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+        ProduitService.delete(1L);
+        
+        assertTrue(true);
+    }
+    
 
     @After
     public void After()
