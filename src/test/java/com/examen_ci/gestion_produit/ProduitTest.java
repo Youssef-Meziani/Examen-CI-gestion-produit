@@ -90,6 +90,72 @@ public class ProduitTest
         ProduitService.create(new Produit(Long.parseLong("3"), "table", 1500, 8));
         assertFalse(ProduitService.read().isEmpty());
     }
+    
+    
+    /**
+     * Unit test for update product.
+     */
+    @Test
+    public void updateNonExisting(){
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("does not exist");
+
+        ProduitService.update(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+    }
+
+    @Test
+    public void updateWithInvalidPrice()
+    {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("invalid");
+        
+        ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+
+        ProduitService.update(new Produit(Long.parseLong("1"), "mouse", -200, 10));
+    }
+    @Test
+    public void updateWithInvalidQuantity()
+    {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("invalid");
+
+        ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+
+        ProduitService.update(new Produit(Long.parseLong("1"), "mouse", 200, -10));
+    }
+    @Test
+    public void updateWithInvalidPriceAndQuantity()
+    {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("invalid");
+        
+        ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+        
+        ProduitService.update(new Produit(Long.parseLong("1"), "mouse", -200, -10));
+    }
+    
+    @Test
+    public void updateExistingAndValidWithExistingName()
+    {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("name is already in use");
+
+        ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+        ProduitService.create(new Produit(Long.parseLong("2"), "keyborad", 400, 8));
+
+        ProduitService.update(new Produit(Long.parseLong("2"), "mouse", 500, 20));
+    }
+
+    @Test
+    public void updateExistingAndValid()
+    {
+        ProduitService.create(new Produit(Long.parseLong("1"), "mouse", 200, 10));
+        ProduitService.create(new Produit(Long.parseLong("2"), "keyborad", 400, 8));
+
+        ProduitService.update(new Produit(Long.parseLong("2"), "headset", 500, 20));
+        assertTrue(true);
+    }
+    
 
     @After
     public void After()

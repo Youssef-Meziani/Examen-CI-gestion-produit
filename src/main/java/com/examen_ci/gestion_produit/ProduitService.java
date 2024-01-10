@@ -39,6 +39,40 @@ public class ProduitService {
         }
     }
 
+    public static void update(Produit updatedProduct) {
+        List<Produit> productList = read();
+    
+        if (!exist(updatedProduct.getId(), updatedProduct.getNom(), productList)) {
+            throw new IllegalArgumentException("does not exist");
+        } else {
+            if (!isUniqueName(updatedProduct.getId(), updatedProduct.getNom(), productList)) {
+                throw new IllegalArgumentException("name is already in use");
+            } else {
+                if (!valid(updatedProduct.getPrix(), updatedProduct.getQuantité())) {
+                    throw new IllegalArgumentException("invalid");
+                } else {
+                    for (Produit existingProduit : productList) {
+                        if (existingProduit.getId().equals(updatedProduct.getId())) {
+                            existingProduit.setNom(updatedProduct.getNom());
+                            existingProduit.setPrix(updatedProduct.getPrix());
+                            existingProduit.setQuantité(updatedProduct.getQuantité());
+                            saveToJSON(productList);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private static boolean isUniqueName(Long productId, String updatedName, List<Produit> productList) {
+        for (Produit product : productList) {
+            if (!product.getId().equals(productId) && product.getNom().equals(updatedName)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static boolean exist(Long productId, String productName, List<Produit> productList){
         for (Produit product : productList) {
