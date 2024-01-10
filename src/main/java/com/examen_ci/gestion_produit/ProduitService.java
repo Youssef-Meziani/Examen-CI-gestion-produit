@@ -1,9 +1,13 @@
 package com.examen_ci.gestion_produit;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 
 public class ProduitService {
 
@@ -19,6 +23,19 @@ public class ProduitService {
         } else {
             productList.add(produit);
             saveToJSON(productList);
+        }
+    }
+
+    public static List<Produit> read() {
+        try (FileReader reader = new FileReader(JSON_FILE_PATH)) {
+            Type listType = new TypeToken<ArrayList<Produit>>() {}.getType();
+            List<Produit> productList = gson.fromJson(reader, listType);
+            if (productList == null) {
+                return new ArrayList<>();
+            }
+            return productList;
+        } catch (IOException e) {
+            return new ArrayList<>();
         }
     }
 
