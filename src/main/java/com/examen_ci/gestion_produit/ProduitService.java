@@ -74,6 +74,15 @@ public class ProduitService {
         return true;
     }
 
+    public static void delete(Long productId) {
+        List<Produit> productList = read();
+        if (!exist(productId, "", productList)) {
+            throw new IllegalArgumentException("does not exist");
+        }
+        productList.removeIf(produit -> produit.getId().equals(productId));
+        saveToJSON(productList);
+    }
+
     public static boolean exist(Long productId, String productName, List<Produit> productList){
         for (Produit product : productList) {
             if (product.getId() == productId || product.getNom().equals(productName)) {
